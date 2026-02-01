@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Data.OleDb;
 
 using Scsl.Unlocode.Core.Metadata;
 
@@ -9,9 +8,7 @@ public class MdbSchemaReader : IMdbSchemaReader
 {
     public IReadOnlyList<MdbTableInfo> GetTables(string mdbPath)
     {
-        var connString = $"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={mdbPath};Persist Security Info=False;";
-
-        using var conn = new OleDbConnection(connString);
+        using var conn = OleDbConnectionFactory.Create(mdbPath);
         conn.Open();
 
         DataTable schema = conn.GetSchema("Tables");
