@@ -1,4 +1,11 @@
 ﻿<Project>
+  <PropertyGroup>
+    <Company>Saunders Creative Strategies Limited {SCS}</Company>
+    <Authors>Shane Saunders</Authors>
+    <Copyright>Copyright © 2026. Saunders Creative Strategies Limited {SCS}. All Rights Reserved.</Copyright>
+    <NoWarn>CS1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.9.50" PrivateAssets="All" />
   </ItemGroup>
