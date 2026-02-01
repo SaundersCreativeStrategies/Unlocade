@@ -2,13 +2,13 @@
 
 using Scsl.Unlocode.Infrastructure.Diagnostics;
 
-namespace Scsl.Unlocode.Infrastructure.Mdb;
+namespace Scsl.Unlocode.Infrastructure.Mdb.Factory;
 
-public static class OleDbConnectionFactory
+internal static class OleDbConnectionFactory
 {
     private const string Provider = "Microsoft.ACE.OLEDB.16.0";
 
-    public static OleDbConnection Create(string filePath, IDiagnosticsSink? diagnostics)
+    internal static OleDbConnection Create(string filePath, IDiagnosticsSink? diagnostics)
     {
         if(string.IsNullOrWhiteSpace(filePath))
             throw new ArgumentException("MDB path cannot be null or empty", nameof(filePath));
