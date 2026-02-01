@@ -25,4 +25,8 @@
     <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
     <PackageReference Include="Spectre.Console.Json" Version="0.54.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Scsl.Unlocode.Infrastructure\Scsl.Unlocode.Infrastructure.csproj" />
+  </ItemGroup>
 </Project>
