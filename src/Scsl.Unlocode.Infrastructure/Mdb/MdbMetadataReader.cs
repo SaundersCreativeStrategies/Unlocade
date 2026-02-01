@@ -2,14 +2,15 @@
 
 using Scsl.Unlocode.Core.Metadata;
 using Scsl.Unlocode.Infrastructure.Diagnostics;
+using Scsl.Unlocode.Infrastructure.Mdb.Factory;
 
 namespace Scsl.Unlocode.Infrastructure.Mdb;
 
-public sealed class MdbSchemaReader : IMdbSchemaReader
+public sealed class MdbMetadataReader : IMdbMetadataReader
 {
     private readonly IDiagnosticsSink? _diagnostics;
 
-    public MdbSchemaReader(IDiagnosticsSink? diagnostics = null)
+    public MdbMetadataReader(IDiagnosticsSink? diagnostics = null)
     {
         _diagnostics = diagnostics;
     }

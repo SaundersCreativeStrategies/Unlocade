@@ -2,7 +2,7 @@
 
 namespace Scsl.Unlocode.Infrastructure.Mdb;
 
-public interface IMdbSchemaReader
+public interface IMdbMetadataReader
 {
     IReadOnlyList<MdbTableInfo> GetTables(string mdbPath);
 }
