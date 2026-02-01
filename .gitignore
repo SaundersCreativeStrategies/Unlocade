@@ -12,6 +12,9 @@ gen
 # Ignore all appsettings JSON files
 appsettings*.json
 
+# Ignore the data folder
+Data/
+
 # But do not ignore the Development file
 #!appsettings.Development.json
 
