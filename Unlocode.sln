@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scsl.Unlocode.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scsl.Unlocode.Core", "src\Scsl.Unlocode.Core\Scsl.Unlocode.Core.csproj", "{A8592F02-0126-48F8-9145-44ED8409C61E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unlocade.DataImporter", "src\Unlocade.DataImporter\Unlocade.DataImporter.csproj", "{4F44FFA5-F58D-49F9-A080-48B52571B4F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unlocode.DataImporter", "src\Unlocode.DataImporter\Unlocode.DataImporter.csproj", "{4F44FFA5-F58D-49F9-A080-48B52571B4F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

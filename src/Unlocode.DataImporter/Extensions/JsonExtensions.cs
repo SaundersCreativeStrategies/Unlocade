@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Unlocade.DataImporter.Extensions;
+namespace Unlocode.DataImporter.Extensions;
 
 public static class JsonExtensions
 {

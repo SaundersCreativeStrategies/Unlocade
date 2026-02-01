@@ -2,7 +2,7 @@
 
 using Spectre.Console;
 
-namespace Unlocade.DataImporter.Presentation;
+namespace Unlocode.DataImporter.Presentation;
 
 public class MdbTableRenderer
 {

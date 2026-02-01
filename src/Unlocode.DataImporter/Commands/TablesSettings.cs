@@ -3,7 +3,7 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Unlocade.DataImporter.Commands;
+namespace Unlocode.DataImporter.Commands;
 
 public class TablesSettings : CommandSettings
 {

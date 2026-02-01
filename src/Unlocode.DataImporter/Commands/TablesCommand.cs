@@ -6,7 +6,9 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Json;
 
-namespace Unlocade.DataImporter.Commands;
+using Unlocode.DataImporter.Presentation;
+
+namespace Unlocode.DataImporter.Commands;
 
 public sealed class TablesCommand : Command<TablesSettings>
 {
@@ -25,7 +27,7 @@ public sealed class TablesCommand : Command<TablesSettings>
         }
         else
         {
-            var renderer = new Presentation.MdbTableRenderer();
+            var renderer = new MdbTableRenderer();
             renderer.Render(tables);
         }
         return 0;
