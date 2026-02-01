@@ -7,6 +7,9 @@
   "fileVersion": {
     "precision": "revision"
   },
+  "nugetVersion": {
+    "precision": "revision"
+  },
   "publicReleaseRefSpec": [
     "^refs/heads/main$",
     "^refs/tags/v\\d+\\.\\d+"
