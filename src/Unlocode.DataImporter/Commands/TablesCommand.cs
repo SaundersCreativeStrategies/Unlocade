@@ -12,9 +12,10 @@ namespace Unlocode.DataImporter.Commands;
 
 public sealed class TablesCommand : Command<TablesSettings>
 {
-    public override int Execute(CommandContext context, TablesSettings settings, CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, TablesSettings settings, CancellationToken
+            cancellationToken)
     {
-        var reader = new MdbSchemaReader();
+        var reader = new MdbMetadataReader();
         var tables = reader.GetTables(settings.FilePath);
 
         if (settings.Json)
