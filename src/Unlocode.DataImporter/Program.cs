@@ -1,5 +1,7 @@
 ﻿using Spectre.Console.Cli;
 
+using Unlocode.DataImporter.Commands;
+
 var app = new CommandApp();
 
 app.Configure(config =>
