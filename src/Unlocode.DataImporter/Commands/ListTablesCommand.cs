@@ -10,9 +10,9 @@ using Unlocode.DataImporter.Presentation;
 
 namespace Unlocode.DataImporter.Commands;
 
-public sealed class TablesCommand : Command<TablesSettings>
+public sealed class ListTablesCommand : Command<ListTablesSettings>
 {
-    public override int Execute(CommandContext context, TablesSettings settings, CancellationToken
+    public override int Execute(CommandContext context, ListTablesSettings settings, CancellationToken
             cancellationToken)
     {
         var reader = new MdbMetadataReader();
