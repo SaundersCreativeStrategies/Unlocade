@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 using Scsl.Unlocode.Core.Diagnostics;
 using Scsl.Unlocode.Core.Metadata;
@@ -6,6 +7,7 @@ using Scsl.Unlocode.Infrastructure.Mdb.Factory;
 
 namespace Scsl.Unlocode.Infrastructure.Mdb.Metadata;
 
+[SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
 public sealed class MdbMetadataReader : IMdbMetadataReader
 {
     private readonly IDiagnosticsSink? _diagnostics;
