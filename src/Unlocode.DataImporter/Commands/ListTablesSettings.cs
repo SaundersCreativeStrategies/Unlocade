@@ -5,7 +5,7 @@ using Spectre.Console.Cli;
 
 namespace Unlocode.DataImporter.Commands;
 
-public class ListTablesSettings : CommandSettings
+public sealed class ListTablesSettings : CommandSettings
 {
     [CommandOption("-f|--file <MDB_PATH>")]
     [Description("Path to the MDB database file (required)")]
