@@ -1,6 +1,6 @@
 ﻿using Scsl.Unlocode.Core.Metadata;
 
-namespace Scsl.Unlocode.Infrastructure.Mdb;
+namespace Scsl.Unlocode.Infrastructure.Mdb.Metadata;
 
 public interface IMdbMetadataReader
 {

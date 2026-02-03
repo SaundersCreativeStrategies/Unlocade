@@ -1,6 +1,6 @@
 ﻿using System.Data.OleDb;
 
-using Scsl.Unlocode.Infrastructure.Diagnostics;
+using Scsl.Unlocode.Core.Diagnostics;
 
 namespace Scsl.Unlocode.Infrastructure.Mdb.Factory;
 

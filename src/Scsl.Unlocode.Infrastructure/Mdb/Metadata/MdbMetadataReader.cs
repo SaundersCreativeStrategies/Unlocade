@@ -1,10 +1,10 @@
 ﻿using System.Data;
 
+using Scsl.Unlocode.Core.Diagnostics;
 using Scsl.Unlocode.Core.Metadata;
-using Scsl.Unlocode.Infrastructure.Diagnostics;
 using Scsl.Unlocode.Infrastructure.Mdb.Factory;
 
-namespace Scsl.Unlocode.Infrastructure.Mdb;
+namespace Scsl.Unlocode.Infrastructure.Mdb.Metadata;
 
 public sealed class MdbMetadataReader : IMdbMetadataReader
 {

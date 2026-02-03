@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 
 using Scsl.Unlocode.Infrastructure.Mdb;
+using Scsl.Unlocode.Infrastructure.Mdb.Metadata;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
