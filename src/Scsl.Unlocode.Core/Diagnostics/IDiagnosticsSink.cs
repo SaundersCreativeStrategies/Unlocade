@@ -2,7 +2,7 @@
 
 public interface IDiagnosticsSink
 {
-    void LogInfo(string message);
-    void LogWarn(string message);
-    void LogError(string message, Exception? ex = null);
+    void LogInfo(DiagnosticsEventId eventId, string message);
+    void LogWarn(DiagnosticsEventId eventId, string message);
+    void LogError(DiagnosticsEventId eventId, string message, Exception? exception = null);
 }

@@ -6,7 +6,9 @@ public sealed class NullDiagnosticsSink : IDiagnosticsSink
 
     private NullDiagnosticsSink() { }
 
-    public void LogInfo(string message) { }
-    public void LogWarn(string message) { }
-    public void LogError(string message, Exception? ex = null) { }
+    public void LogInfo(DiagnosticsEventId eventId, string message)  { }
+
+    public void LogWarn(DiagnosticsEventId eventId, string message)  { }
+
+    public void LogError(DiagnosticsEventId eventId, string message, Exception? exception = null) { }
 }
