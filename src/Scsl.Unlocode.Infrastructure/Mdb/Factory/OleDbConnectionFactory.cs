@@ -1,4 +1,5 @@
 ﻿using System.Data.OleDb;
+using System.Diagnostics.CodeAnalysis;
 
 using Scsl.Unlocode.Core.Diagnostics;
 
@@ -8,6 +9,7 @@ internal static class OleDbConnectionFactory
 {
     private const string Provider = "Microsoft.ACE.OLEDB.16.0";
 
+    [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
     internal static OleDbConnection Create(string filePath, IDiagnosticsSink? diagnostics)
     {
         if (string.IsNullOrWhiteSpace(filePath))
@@ -19,8 +21,17 @@ internal static class OleDbConnectionFactory
 
         var connectionString = $"Provider={Provider};Data Source={filePath};Persist Security Info=False;";
 
-        diagnostics?.LogInfo(DiagnosticsEvents.OleDbConnectionCreated, "OLE DB connection object created");
+        try
+        {
+            var connection = new OleDbConnection(connectionString);
 
-        return new OleDbConnection(connectionString);
+            diagnostics?.LogInfo(DiagnosticsEvents.OleDbConnectionCreated, "OLE DB connection object created");
+            return connection;
+        }
+        catch (Exception e)
+        {
+            diagnostics?.LogError(DiagnosticsEvents.OleDbCreateFailed, "Failed to create OLE DB connection", e);
+            throw;
+        }
     }
 }
