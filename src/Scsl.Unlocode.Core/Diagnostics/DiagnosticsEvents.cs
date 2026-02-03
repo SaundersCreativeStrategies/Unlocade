@@ -13,6 +13,7 @@ public static class DiagnosticsEvents
     public static readonly DiagnosticsEventId OleDbProviderSelected = new(1101, "OLEDB_PROVIDER_SELECTED");
     public static readonly DiagnosticsEventId OleDbDataSourceSet = new(1102, "OLEDB_DATASOURCE_SET");
     public static readonly DiagnosticsEventId OleDbConnectionCreated = new(1103, "OLEDB_CONNECTION_CREATED");
+    public static readonly DiagnosticsEventId OleDbCreateCompleted = new(1104, "OLEDB_CREATE_COMPLETED");
 
     public static readonly DiagnosticsEventId OleDbCreateFailed = new(1199, "OLEDB_CREATE_FAILED");
 
