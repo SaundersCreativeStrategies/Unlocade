@@ -6,7 +6,14 @@ public static class DiagnosticsEvents
     public static readonly DiagnosticsEventId MdbOpen = new(1000, "MDB_OPEN");
     public static readonly DiagnosticsEventId MdbListTables = new(1001, "MDB_LIST_TABLES");
     public static readonly DiagnosticsEventId MdbReadSchema = new(1002, "MDB_READ_SCHEMA");
-    public static readonly DiagnosticsEventId MdbTablesFound = new(1003, "MDB_TABLES_FOUND");
+
+    public static readonly DiagnosticsEventId MdbListTablesStart = new(1010, "MDB_LIST_TABLES_START");
+    public static readonly DiagnosticsEventId MdbListTablesCompleted = new(1011, "MDB_LIST_TABLES_COMPLETED");
+    public static readonly DiagnosticsEventId MdbTablesFound = new(1012, "MDB_TABLES_FOUND");
+
+    public static readonly DiagnosticsEventId MdbReadSchemaStart = new(1020, "MDB_READ_SCHEMA_START");
+    public static readonly DiagnosticsEventId MdbReadSchemaCompleted = new(1021, "MDB_READ_SCHEMA_COMPLETED");
+    public static readonly DiagnosticsEventId MdbSchemaColumnsFound = new(1022, "MDB_SCHEMA_COLUMNS_FOUND");
 
     // OLE DB Connection Lifecycle (1100 range)
     public static readonly DiagnosticsEventId OleDbCreateStart = new(1100, "OLEDB_CREATE_START");
