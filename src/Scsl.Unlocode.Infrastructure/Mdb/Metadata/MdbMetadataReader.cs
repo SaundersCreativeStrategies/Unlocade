@@ -14,14 +14,15 @@ public sealed class MdbMetadataReader : IMdbMetadataReader
     {
         _diagnostics = diagnostics;
     }
+
     public IReadOnlyList<MdbTableInfo> GetTables(string mdbPath)
     {
         using var conn = OleDbConnectionFactory.Create(mdbPath, _diagnostics);
 
-        _diagnostics?.LogInfo($"Opening OLE DB connection");
+        _diagnostics?.LogInfo(DiagnosticsEvents.MdbOpen, $"Opening MDB file: {mdbPath}");
         conn.Open();
 
-        _diagnostics?.LogInfo("Reading table schema");
+        _diagnostics?.LogInfo(DiagnosticsEvents.MdbListTables, "Retrieving table list from MDB");
         DataTable schema = conn.GetSchema("Tables");
 
         var result = new List<MdbTableInfo>();
@@ -33,15 +34,11 @@ public sealed class MdbMetadataReader : IMdbMetadataReader
 
             if (type == "TABLE" && !name.StartsWith("MSys"))
             {
-                result.Add(new MdbTableInfo()
-                {
-                    Name = name,
-                    Type = type
-                });
+                result.Add(new MdbTableInfo() { Name = name, Type = type });
             }
         }
 
-        _diagnostics?.LogInfo($"Tables found: {result.Count}");
+        _diagnostics?.LogInfo(DiagnosticsEvents.MdbTablesFound, $"Tables found: {result.Count}");
         return result;
     }
 }

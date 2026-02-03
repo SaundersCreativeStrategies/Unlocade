@@ -10,15 +10,16 @@ internal static class OleDbConnectionFactory
 
     internal static OleDbConnection Create(string filePath, IDiagnosticsSink? diagnostics)
     {
-        if(string.IsNullOrWhiteSpace(filePath))
+        if (string.IsNullOrWhiteSpace(filePath))
             throw new ArgumentException("MDB path cannot be null or empty", nameof(filePath));
+
+        diagnostics?.LogInfo(DiagnosticsEvents.OleDbCreateStart, "Starting OLE DB connection creation");
+        diagnostics?.LogInfo(DiagnosticsEvents.OleDbProviderSelected, $"OLE DB Provider: {Provider}");
+        diagnostics?.LogInfo(DiagnosticsEvents.OleDbDataSourceSet, $"MDB Path: {filePath}");
 
         var connectionString = $"Provider={Provider};Data Source={filePath};Persist Security Info=False;";
 
-        // Verbose logging
-        diagnostics?.LogInfo($"OLE DB Provdider: {Provider}");
-        diagnostics?.LogInfo($"MDB Path: {filePath}");
-        diagnostics?.LogInfo($"Creating OLE DB Connection");
+        diagnostics?.LogInfo(DiagnosticsEvents.OleDbConnectionCreated, "OLE DB connection object created");
 
         return new OleDbConnection(connectionString);
     }

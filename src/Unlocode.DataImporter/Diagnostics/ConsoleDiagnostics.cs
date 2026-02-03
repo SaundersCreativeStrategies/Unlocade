@@ -4,7 +4,7 @@ using Spectre.Console;
 
 namespace Unlocode.DataImporter.Diagnostics;
 
-public class ConsoleDiagnostics : IDiagnosticsSink
+public sealed class ConsoleDiagnostics : IDiagnosticsSink
 {
     private readonly bool _verbose;
 
@@ -12,25 +12,24 @@ public class ConsoleDiagnostics : IDiagnosticsSink
     {
         _verbose = verbose;
     }
-    public void LogInfo(string message)
+
+    public void LogInfo(DiagnosticsEventId eventId, string message)
     {
-        if(_verbose)
-            AnsiConsole.MarkupLine($"[grey][Info]:[/] {message}");
+        if (_verbose)
+            AnsiConsole.MarkupLine($"[grey][INFO][/]{eventId}: {message}");
     }
 
-    public void LogWarn(string message)
+    public void LogWarn(DiagnosticsEventId eventId, string message)
     {
-        if(_verbose)
-            AnsiConsole.MarkupLine($"[yellow][Warning]:[/] {message}");
+        if (_verbose)
+            AnsiConsole.MarkupLine($"[yellow][WARNING][/]{eventId}: {message}");
     }
 
-    public void LogError(string message, Exception? ex = null)
+    public void LogError(DiagnosticsEventId eventId, string message, Exception? exception = null)
     {
-        AnsiConsole.MarkupLine($"[red][Error]:[/] {message}");
+        AnsiConsole.MarkupLine($"[red][ERROR][/]{eventId}: {message}");
 
-        if (_verbose && ex != null)
-        {
-            AnsiConsole.WriteException(ex);
-        }
+        if (_verbose && exception != null)
+            AnsiConsole.WriteException(exception);
     }
 }
