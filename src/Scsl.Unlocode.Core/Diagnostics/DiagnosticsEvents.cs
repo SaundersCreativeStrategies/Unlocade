@@ -4,8 +4,9 @@ public static class DiagnosticsEvents
 {
     // Mdb
     public static readonly DiagnosticsEventId MdbOpen = new(1000, "MDB_OPEN");
-    public static readonly DiagnosticsEventId MdbListTables = new(1001, "MDB_LIST_TABLES");
-    public static readonly DiagnosticsEventId MdbReadSchema = new(1002, "MDB_READ_SCHEMA");
+    public static readonly DiagnosticsEventId MdbOpenCompleted = new(1001, "MDB_OPEN_COMPLETED");
+    public static readonly DiagnosticsEventId MdbListTables = new(1002, "MDB_LIST_TABLES");
+    public static readonly DiagnosticsEventId MdbReadSchema = new(1003, "MDB_READ_SCHEMA");
 
     public static readonly DiagnosticsEventId MdbListTablesStart = new(1010, "MDB_LIST_TABLES_START");
     public static readonly DiagnosticsEventId MdbListTablesCompleted = new(1011, "MDB_LIST_TABLES_COMPLETED");
