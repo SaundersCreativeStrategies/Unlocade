@@ -8,7 +8,7 @@ namespace Unlocode.DataImporter.Commands;
 public class ListTablesSettings : CommandSettings
 {
     [CommandOption("-f|--file <MDB_PATH>")]
-    [Description("Path to the MDB File")]
+    [Description("Path to the MDB database file (required)")]
     public string FilePath { get; init; } = string.Empty;
 
     [CommandOption("--json")]

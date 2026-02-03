@@ -11,7 +11,7 @@ app.Configure(config =>
     config.AddBranch("tables", tables =>
     {
         tables.AddCommand<ListTablesCommand>("list")
-            .WithDescription("List all tables.");
+            .WithDescription("Display all table names available in the MDB file");
     });
 });
 
