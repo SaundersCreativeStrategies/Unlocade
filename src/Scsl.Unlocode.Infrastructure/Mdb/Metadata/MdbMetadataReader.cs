@@ -14,18 +14,24 @@ public sealed class MdbMetadataReader : IMdbMetadataReader
 
     public MdbMetadataReader(IDiagnosticsSink? diagnostics = null)
     {
-        _diagnostics = diagnostics;
+        _diagnostics = diagnostics ?? NullDiagnosticsSink.Instance;
     }
 
     public IReadOnlyList<MdbTableInfo> GetTables(string mdbPath)
     {
-        using var conn = OleDbConnectionFactory.Create(mdbPath, _diagnostics);
+        using var scope = new DiagnosticsScope(
+            _diagnostics!,
+            DiagnosticsEvents.MdbListTablesStart,
+            DiagnosticsEvents.MdbListTablesCompleted,
+            "Listing MDB tables");
+
+        using var connection = OleDbConnectionFactory.Create(mdbPath, _diagnostics);
 
         _diagnostics?.LogInfo(DiagnosticsEvents.MdbOpen, $"Opening MDB file: {mdbPath}");
-        conn.Open();
+        connection.Open();
 
         _diagnostics?.LogInfo(DiagnosticsEvents.MdbListTables, "Retrieving table list from MDB");
-        DataTable schema = conn.GetSchema("Tables");
+        DataTable schema = connection.GetSchema("Tables");
 
         var result = new List<MdbTableInfo>();
 
