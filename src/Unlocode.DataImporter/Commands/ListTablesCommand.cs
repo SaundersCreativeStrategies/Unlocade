@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 
-using Scsl.Unlocode.Infrastructure.Mdb;
 using Scsl.Unlocode.Infrastructure.Mdb.Metadata;
 
 using Spectre.Console;
@@ -13,6 +12,8 @@ namespace Unlocode.DataImporter.Commands;
 
 public sealed class ListTablesCommand : Command<ListTablesSettings>
 {
+    private readonly ITableRenderer _renderer = new SpectreTableRenderer();
+
     public override int Execute(CommandContext context, ListTablesSettings settings, CancellationToken
             cancellationToken)
     {
@@ -29,8 +30,12 @@ public sealed class ListTablesCommand : Command<ListTablesSettings>
         }
         else
         {
-            var renderer = new MdbTableRenderer();
-            renderer.Render(tables);
+            _renderer.Render(
+                tables,
+                style: TableStyle.MySql,
+                propertyFilter: TableRendererDefaults.SimpleTypesOnly,
+                headerFormatter: TableRendererDefaults.MysqlHeader,
+                valueFormatter: TableRendererDefaults.MySqlValueFormatter);
         }
         return 0;
     }
