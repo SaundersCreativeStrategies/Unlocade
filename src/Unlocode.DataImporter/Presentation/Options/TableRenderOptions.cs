@@ -1,6 +1,6 @@
 ﻿using Unlocode.DataImporter.Presentation.Enums;
 
-namespace Unlocode.DataImporter.Presentation;
+namespace Unlocode.DataImporter.Presentation.Options;
 
 public sealed class TableRenderOptions
 {
