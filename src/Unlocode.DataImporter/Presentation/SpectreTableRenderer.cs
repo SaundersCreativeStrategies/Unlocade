@@ -1,6 +1,9 @@
-﻿using System.Reflection;
+﻿using System.Data.SqlTypes;
+using System.Reflection;
 
 using Spectre.Console;
+
+using Unlocode.DataImporter.Presentation.Enums;
 
 namespace Unlocode.DataImporter.Presentation;
 
@@ -10,10 +13,13 @@ public sealed class SpectreTableRenderer : ITableRenderer
         IEnumerable<T> items,
         string? title = null,
         TableStyle style = TableStyle.Default,
+        TableRenderOptions? options = null,
         Func<PropertyInfo, bool>? propertyFilter = null,
         Func<PropertyInfo, string>? headerFormatter = null,
         Func<object?, string>? valueFormatter = null)
     {
+        var renderOptions = options ?? TableRenderOptions.Default;
+
         var list = items.ToList();
         if (list.Count == 0)
         {
@@ -36,14 +42,16 @@ public sealed class SpectreTableRenderer : ITableRenderer
             table.AddColumn( new TableColumn(
                 headerFormatter?.Invoke(prop) ?? prop.Name)
             {
-                Alignment = Justify.Left
+                Alignment = Justify.Left,
+                NoWrap = true
             });
         }
 
         foreach (var values in list.Select(item => properties.Select(p =>
                  {
                      var value = p.GetValue(item);
-                     return valueFormatter?.Invoke(value) ?? value?.ToString() ?? "NULL";
+                     var raw =valueFormatter?.Invoke(value) ?? value?.ToString() ?? "NULL";
+                     return Truncate(raw.Trim(), renderOptions);
                  }).ToArray()))
         {
             table.AddRow(values);
@@ -58,14 +66,39 @@ public sealed class SpectreTableRenderer : ITableRenderer
         }
     }
 
+    private static string Truncate(string value, TableRenderOptions options)
+    {
+        if(options.MaxColumnWidth is null)
+            return value;
+
+        var max = options.MaxColumnWidth.Value;
+        if (value.Length <= max)
+            return value;
+
+        return options.TruncateMode switch
+        {
+            TruncateMode.Strict => value[..max],
+            TruncateMode.Friendly => FriendlyTruncate(value, max, options.TruncationSuffix),
+            _ => value
+        };
+    }
+
+    private static string FriendlyTruncate(string value, int max, string suffix)
+    {
+        if (max <= suffix.Length)
+            return suffix[..max];
+
+        var cut = max - suffix.Length;
+        return $"{value[..cut]}{suffix}";
+    }
+
     private static void ApplyStyle(Table table, TableStyle style, string? title = null)
     {
         switch (style)
         {
             case TableStyle.MySql:
                 table.Border(TableBorder.Ascii2)
-                    .BorderColor(Color.Grey)
-                    .Expand();
+                    .BorderColor(Color.Grey);
                 break;
 
             case TableStyle.Default:

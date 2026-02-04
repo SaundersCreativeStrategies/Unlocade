@@ -7,6 +7,7 @@ using Spectre.Console.Cli;
 using Spectre.Console.Json;
 
 using Unlocode.DataImporter.Presentation;
+using Unlocode.DataImporter.Presentation.Enums;
 
 namespace Unlocode.DataImporter.Commands;
 
@@ -19,6 +20,7 @@ public sealed class ListTablesCommand : Command<ListTablesSettings>
     {
         var reader = new MdbMetadataReader();
         var tables = reader.GetTables(settings.FilePath);
+        var renderOptions = TableRenderOptionsFactory.From(settings);
 
         if (settings.Json)
         {
@@ -33,6 +35,7 @@ public sealed class ListTablesCommand : Command<ListTablesSettings>
             _renderer.Render(
                 tables,
                 style: TableStyle.MySql,
+                options: renderOptions,
                 propertyFilter: TableRendererDefaults.SimpleTypesOnly,
                 headerFormatter: TableRendererDefaults.MysqlHeader,
                 valueFormatter: TableRendererDefaults.MySqlValueFormatter);

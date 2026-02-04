@@ -3,6 +3,8 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
 
+using Unlocode.DataImporter.Presentation.Enums;
+
 namespace Unlocode.DataImporter.Commands;
 
 public abstract class GlobalSettings : CommandSettings
@@ -23,6 +25,14 @@ public abstract class GlobalSettings : CommandSettings
     [Description("Enable verbose diagnostics output")]
     public bool Verbose { get; init; }
 
+    [CommandOption("--max-width <N>")]
+    [Description("Maximum column display width")]
+    public int? MaxWidth { get; init; }
+
+    [CommandOption("--truncate-mode <MODE>")]
+    [Description("Truncation mode: strict | friendly (default: friendly)")]
+    public TruncateMode TruncateMode { get; init; } = TruncateMode.Friendly;
+
     public override ValidationResult Validate()
     {
         if (string.IsNullOrWhiteSpace(FilePath))
@@ -33,6 +43,9 @@ public abstract class GlobalSettings : CommandSettings
 
         if (!string.IsNullOrWhiteSpace(ConfigPath) && !File.Exists(ConfigPath))
             return ValidationResult.Error("Config file not found: {ConfigPath}");
+
+        if(MaxWidth is <= 0)
+            return ValidationResult.Error("--max-width must greater than zero.");
 
         return ValidationResult.Success();
     }
