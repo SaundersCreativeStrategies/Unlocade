@@ -1,6 +1,7 @@
 ﻿using Unlocode.DataImporter.Commands;
+using Unlocode.DataImporter.Presentation.Options;
 
-namespace Unlocode.DataImporter.Presentation;
+namespace Unlocode.DataImporter.Presentation.Factory;
 
 public sealed class TableRenderOptionsFactory
 {
