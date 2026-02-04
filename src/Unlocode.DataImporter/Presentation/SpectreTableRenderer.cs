@@ -17,7 +17,8 @@ public sealed class SpectreTableRenderer : ITableRenderer
         var list = items.ToList();
         if (list.Count == 0)
         {
-            AnsiConsole.MarkupLine("[yellow]No items found.[/]");
+            AnsiConsole.WriteLine(
+                style == TableStyle.MySql ? "Empty set." : "No data found.");
             return;
         }
 
@@ -49,6 +50,12 @@ public sealed class SpectreTableRenderer : ITableRenderer
         }
 
         AnsiConsole.Write(table);
+
+        if (style == TableStyle.MySql)
+        {
+            AnsiConsole.WriteLine(
+                $"{list.Count} row{(list.Count == 1 ? "" : "s")} in set");
+        }
     }
 
     private static void ApplyStyle(Table table, TableStyle style, string? title = null)
