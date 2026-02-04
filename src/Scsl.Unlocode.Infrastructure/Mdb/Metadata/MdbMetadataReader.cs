@@ -99,7 +99,7 @@ public sealed class MdbMetadataReader : IMdbMetadataReader
                 if (columnName == null || !columnMap.TryGetValue(columnName, out var column))
                     continue;
 
-                column.IsIdexed = true;
+                column.IsIndexed = true;
 
                 if (row["PRIMARY_KEY"] is bool and true)
                     column.IsPrimaryKey = true;

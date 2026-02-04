@@ -8,7 +8,7 @@ public sealed class MdbColumnInfo
     public bool IsNullable { get; init; }
 
     public bool IsPrimaryKey { get; set; }
-    public bool IsIdexed { get; set; }
+    public bool IsIndexed { get; set; }
     public bool IsUnique { get; set; }
     public bool IsForeignKey { get; set; }
     public string? ReferencesTable { get; set; }
