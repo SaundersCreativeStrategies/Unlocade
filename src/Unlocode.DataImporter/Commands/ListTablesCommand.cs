@@ -8,6 +8,7 @@ using Spectre.Console.Json;
 
 using Unlocode.DataImporter.Presentation;
 using Unlocode.DataImporter.Presentation.Enums;
+using Unlocode.DataImporter.Presentation.Factory;
 
 namespace Unlocode.DataImporter.Commands;
 

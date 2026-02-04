@@ -4,6 +4,7 @@ using System.Reflection;
 using Spectre.Console;
 
 using Unlocode.DataImporter.Presentation.Enums;
+using Unlocode.DataImporter.Presentation.Options;
 
 namespace Unlocode.DataImporter.Presentation;
 
