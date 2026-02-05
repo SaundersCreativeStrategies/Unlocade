@@ -10,7 +10,7 @@ using Unlocode.DataImporter.Presentation;
 using Unlocode.DataImporter.Presentation.Enums;
 using Unlocode.DataImporter.Presentation.Factory;
 
-namespace Unlocode.DataImporter.Commands;
+namespace Unlocode.DataImporter.Commands.Tables;
 
 public sealed class ListTablesCommand : Command<ListTablesSettings>
 {

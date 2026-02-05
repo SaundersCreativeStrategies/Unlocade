@@ -1,6 +1,7 @@
 ﻿using Spectre.Console.Cli;
 
 using Unlocode.DataImporter.Commands;
+using Unlocode.DataImporter.Commands.Tables;
 
 var app = new CommandApp();
 

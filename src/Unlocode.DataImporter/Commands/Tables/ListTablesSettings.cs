@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
 
-using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Unlocode.DataImporter.Commands;
+namespace Unlocode.DataImporter.Commands.Tables;
 
 public sealed class ListTablesSettings : GlobalSettings
 {
