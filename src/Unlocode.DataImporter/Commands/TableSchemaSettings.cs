@@ -1,0 +1,29 @@
+﻿using System.ComponentModel;
+
+using Spectre.Console;
+using Spectre.Console.Cli;
+
+namespace Unlocode.DataImporter.Commands;
+
+public class TableSchemaSettings : GlobalSettings
+{
+    [CommandOption("-t|--table <TABLE>")]
+    [Description("Table name to inspect")]
+    public string Table { get; init; } = string.Empty;
+
+    [CommandOption("--json")]
+    [Description("Output results as JSON")]
+    public bool Json { get; init; }
+
+    public override ValidationResult Validate()
+    {
+        var baseResult = base.Validate();
+        if (!baseResult.Successful)
+            return baseResult;
+
+        if (string.IsNullOrWhiteSpace(Table))
+            return ValidationResult.Error("You must specify --table <TABLE>.");
+
+        return ValidationResult.Success();
+    }
+}
