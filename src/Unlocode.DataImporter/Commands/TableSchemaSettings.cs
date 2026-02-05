@@ -24,6 +24,13 @@ public class TableSchemaSettings : GlobalSettings
         if (string.IsNullOrWhiteSpace(Table))
             return ValidationResult.Error("You must specify --table <TABLE>.");
 
+        if (Table.Contains(' ') && Table.Any(c => c is '“' or '”' or '‘' or '’'))
+        {
+            return ValidationResult.Error(
+                "Invalid quotes detected. Use plain ASCII quotes: " +
+                "--table \"example table\" or --table 'example table'.");
+        }
+
         return ValidationResult.Success();
     }
 }
