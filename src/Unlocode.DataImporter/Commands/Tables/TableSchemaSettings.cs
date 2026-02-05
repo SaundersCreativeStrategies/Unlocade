@@ -8,7 +8,7 @@ namespace Unlocode.DataImporter.Commands.Tables;
 public class TableSchemaSettings : GlobalSettings
 {
     [CommandOption("-t|--table <TABLE>")]
-    [Description("Table name to inspect")]
+    [Description("Table name (quote if it contains spaces, e.g. \"Example Table\")")]
     public string Table { get; init; } = string.Empty;
 
     [CommandOption("--json")]
