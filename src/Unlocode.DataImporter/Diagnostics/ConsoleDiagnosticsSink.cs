@@ -4,11 +4,11 @@ using Spectre.Console;
 
 namespace Unlocode.DataImporter.Diagnostics;
 
-public sealed class ConsoleDiagnostics : IDiagnosticsSink
+public sealed class ConsoleDiagnosticsSink : IDiagnosticsSink
 {
     private readonly bool _verbose;
 
-    public ConsoleDiagnostics(bool verbose)
+    public ConsoleDiagnosticsSink(bool verbose)
     {
         _verbose = verbose;
     }

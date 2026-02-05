@@ -22,7 +22,7 @@ public class TableSchemaCommand : Command<TableSchemaSettings>
         CancellationToken cancellationToken)
     {
         IDiagnosticsSink diagnostics = settings.Verbose
-            ? new ConsoleDiagnostics(true)
+            ? new ConsoleDiagnosticsSink(true)
             : NullDiagnosticsSink.Instance;
 
         if (settings.Verbose)
