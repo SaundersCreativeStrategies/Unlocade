@@ -16,20 +16,24 @@ public sealed class ConsoleDiagnostics : IDiagnosticsSink
     public void LogInfo(DiagnosticsEventId eventId, string message)
     {
         if (_verbose)
-            AnsiConsole.MarkupLine($"[grey][INFO][/]{eventId}: {message}");
+            Write(new DiagnosticsRecord(DateTimeOffset.Now, DiagnosticsLevel.Info, eventId, message));
     }
 
     public void LogWarn(DiagnosticsEventId eventId, string message)
     {
-        if (_verbose)
-            AnsiConsole.MarkupLine($"[yellow][WARNING][/]{eventId}: {message}");
+        Write(new DiagnosticsRecord(
+            DateTimeOffset.Now, DiagnosticsLevel.Warning, eventId, message));
     }
 
     public void LogError(DiagnosticsEventId eventId, string message, Exception? exception = null)
     {
-        AnsiConsole.MarkupLine($"[red][ERROR][/]{eventId}: {message}");
+        Write(new DiagnosticsRecord(
+            DateTimeOffset.Now, DiagnosticsLevel.Error, eventId, message, exception));
+    }
 
-        if (_verbose && exception != null)
-            AnsiConsole.WriteException(exception);
+    private static void Write(DiagnosticsRecord record)
+    {
+        var output = SpectreDiagnosticsFormatter.Format(record);
+        AnsiConsole.MarkupLine(output);
     }
 }
