@@ -3,6 +3,7 @@
 using Scsl.Unlocode.Core.Diagnostics;
 using Scsl.Unlocode.Core.Metadata;
 using Scsl.Unlocode.Infrastructure.Mdb.Metadata;
+using Scsl.Unlocode.Infrastructure.Mdb.Resolution;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -45,7 +46,14 @@ public class TableSchemaCommand : Command<TableSchemaSettings>
                    DiagnosticsEvents.MdbReadSchemaCompleted,
                    $"Reading schema from table '{settings.Table}'"))
         {
-            schema = reader.GetTableSchema(settings.FilePath, settings.Table);
+            // Get table list first
+            var tables = reader.GetTables(settings.FilePath);
+
+            // Resolve table name safely
+            var resolvedTable = TableNameResolver.Resolve(
+                settings.Table, tables, diagnostics);
+
+            schema = reader.GetTableSchema(settings.FilePath, resolvedTable);
         }
 
         diagnostics.LogInfo(DiagnosticsEvents.MdbSchemaColumnsFound, $"Columns found: {schema.Count}");
