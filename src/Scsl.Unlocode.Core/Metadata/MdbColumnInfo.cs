@@ -1,9 +1,15 @@
-﻿namespace Scsl.Unlocode.Core.Metadata;
+﻿using System.Data.OleDb;
+
+namespace Scsl.Unlocode.Core.Metadata;
 
 public sealed class MdbColumnInfo
 {
     public string Name { get; init; } = default!;
     public string DataType { get; init; } = default!;
+
+    // Raw OLE DB type (for import, mapping, SQL generation)
+    public OleDbType OleDbType { get; init; }
+
     public int? Size { get; init; }
     public bool IsNullable { get; init; }
 

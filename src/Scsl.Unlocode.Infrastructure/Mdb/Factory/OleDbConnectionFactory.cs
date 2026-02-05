@@ -16,29 +16,28 @@ internal static class OleDbConnectionFactory
             throw new ArgumentException("MDB path cannot be null or empty", nameof(filePath));
 
         var sink = diagnostics ?? NullDiagnosticsSink.Instance;
-
-        using var scope = new DiagnosticsScope(
-            sink,
-            DiagnosticsEvents.OleDbCreateStart,
-            DiagnosticsEvents.OleDbCreateCompleted,
-            "OLE DB connection creation");
-
-        sink.LogInfo(DiagnosticsEvents.OleDbCreateStart, "Starting OLE DB connection creation");
-        sink.LogInfo(DiagnosticsEvents.OleDbProviderSelected, $"OLE DB Provider: {Provider}");
-        sink.LogInfo(DiagnosticsEvents.OleDbDataSourceSet, $"MDB Path: {filePath}");
-
-        var connectionString = $"Provider={Provider};Data Source={filePath};Persist Security Info=False;";
-
         try
         {
+            using var scope = new DiagnosticsScope(
+                sink,
+                DiagnosticsEvents.OleDbCreateStart,
+                DiagnosticsEvents.OleDbCreateCompleted,
+                "OLE DB connection creation");
+
+            sink.LogInfo(DiagnosticsEvents.OleDbCreateStart, "Starting OLE DB connection creation");
+            sink.LogInfo(DiagnosticsEvents.OleDbProviderSelected, $"OLE DB Provider selected: {Provider}");
+            sink.LogInfo(DiagnosticsEvents.OleDbDataSourceSet, $"OLE DB data source set to {filePath}");
+
+            var connectionString = $"Provider={Provider};Data Source={filePath};Persist Security Info=False;";
+
             var connection = new OleDbConnection(connectionString);
 
             sink.LogInfo(DiagnosticsEvents.OleDbConnectionCreated, "OLE DB connection object created");
             return connection;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            sink.LogError(DiagnosticsEvents.OleDbCreateFailed, "Failed to create OLE DB connection", e);
+            sink.LogError(DiagnosticsEvents.OleDbCreateFailed, "Failed to create OLE DB connection", ex);
             throw;
         }
     }
