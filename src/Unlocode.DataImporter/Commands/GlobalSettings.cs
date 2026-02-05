@@ -9,6 +9,9 @@ namespace Unlocode.DataImporter.Commands;
 
 public abstract class GlobalSettings : CommandSettings
 {
+    private static readonly HashSet<string> ValidAccessExtensions =
+        new(StringComparer.OrdinalIgnoreCase) { ".mdb", ".accdb", ".mde", ".accde" };
+
     [CommandOption("-f|--file <MDB_PATH>")]
     [Description("Path to the MDB database file")]
     public string FilePath { get; init; } = string.Empty;
@@ -25,7 +28,7 @@ public abstract class GlobalSettings : CommandSettings
     [Description("Enable verbose diagnostics output")]
     public bool Verbose { get; init; }
 
-    [CommandOption("--max-width <N>")]
+    [CommandOption("--max-width <WIDTH>")]
     [Description("Maximum column display width")]
     public int? MaxWidth { get; init; }
 
@@ -46,6 +49,11 @@ public abstract class GlobalSettings : CommandSettings
 
         if(MaxWidth is <= 0)
             return ValidationResult.Error("--max-width must greater than zero.");
+
+        var extension = Path.GetExtension(FilePath);
+        if (!ValidAccessExtensions.Contains(extension))
+            return ValidationResult.Error($"Invalid Access database file extension '{extension}'. " +
+                $"Supported extensions: .mdb, .accdb, .mde, .accde");
 
         return ValidationResult.Success();
     }
