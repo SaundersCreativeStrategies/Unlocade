@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 
+using Scsl.Unlocode.Infrastructure.Mdb;
+
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -54,6 +56,15 @@ public abstract class GlobalSettings : CommandSettings
         if (!ValidAccessExtensions.Contains(extension))
             return ValidationResult.Error($"Invalid Access database file extension '{extension}'. " +
                 $"Supported extensions: .mdb, .accdb, .mde, .accde");
+
+        // Provider availability check (AFTER extension)
+        if (!AccessProviderAvailability.IsAceInstalled())
+        {
+            return ValidationResult.Error(
+                "This Access database requires the Microsoft ACE OLE DB provider, " +
+                "but it is not installed on this manchine.\n\n" +
+                "Install: https://www.microsoft.com/en-us/download/details.aspx?id=54920");
+        }
 
         return ValidationResult.Success();
     }
