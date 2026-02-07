@@ -34,6 +34,8 @@ public static class DiagnosticsEvents
     public static readonly DiagnosticsEventId OleDbConnectionCreated = new(1103, "OLEDB_CONNECTION_CREATED");
     public static readonly DiagnosticsEventId OleDbCreateCompleted = new(1104, "OLEDB_CREATE_COMPLETED");
     public static readonly DiagnosticsEventId OleDbCreateFailed = new(1199, "OLEDB_CREATE_FAILED");
+    public static readonly DiagnosticsEventId DatabaseError = new(1190, "DATABASE_ERROR");
+    public static readonly DiagnosticsEventId AccessDenied = new(1191, "ACCESS_DENIED");
 
     // ─────────────────────────
     // Import Pipeline (2000–2999)
@@ -51,6 +53,9 @@ public static class DiagnosticsEvents
     public static readonly DiagnosticsEventId CliRenderCompleted = new(3001, "CLI_RENDER_COMPLETED");
     public static readonly DiagnosticsEventId CliJsonOutput = new(3002, "CLI_JSON_OUTPUT");
     public static readonly DiagnosticsEventId CliTruncationEnabled = new(3003, "CLI_TRUNCATION_ENABLED");
+    public static readonly DiagnosticsEventId CommandFailed = new(3004, "COMMAND_FAILED");
+    public static readonly DiagnosticsEventId VerboseHint = new(3005, "VERBOSE_HINT");
+    public static readonly DiagnosticsEventId OperationRuntime = new(3006, "OPERATION_RUNTIME");
 
     // ─────────────────────────
     // Errors (9000+)
