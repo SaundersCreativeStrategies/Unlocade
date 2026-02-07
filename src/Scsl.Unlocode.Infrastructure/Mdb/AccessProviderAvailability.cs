@@ -13,9 +13,6 @@ public static class AccessProviderAvailability
         if(IsProgIdRegistered("Microsoft.ACE.OLEDB.16.0"))
             return "Microsoft.ACE.OLEDB.16.0";
 
-        if(IsProgIdRegistered("Microsoft.ACE.OLEDB.15.0"))
-            return "Microsoft.ACE.OLEDB.15.0";
-
         if (IsProgIdRegistered("Microsoft.ACE.OLEDB.12.0"))
             return "Microsoft.ACE.OLEDB.12.0";
 
