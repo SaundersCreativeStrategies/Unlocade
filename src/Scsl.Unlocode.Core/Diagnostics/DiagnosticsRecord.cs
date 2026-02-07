@@ -1,22 +1,23 @@
 ﻿namespace Scsl.Unlocode.Core.Diagnostics;
 
 public sealed record DiagnosticsRecord(
-    DateTimeOffset Timestamp,
-    DiagnosticsLevel Level,
     DiagnosticsEventId EventId,
     string Message,
-    Exception? Exception = null)
+    DateTimeOffset Timestamp,
+    DiagnosticsLevel Level,
+    Exception? Exception = null,
+    long? ElapsedMilliseconds = null)
 {
     public static DiagnosticsRecord Info(
         DiagnosticsEventId eventId,
-        string message) => new(DateTimeOffset.Now, DiagnosticsLevel.Info, eventId, message);
+        string message) => new(eventId, message, DateTimeOffset.Now, DiagnosticsLevel.Info);
 
     public static DiagnosticsRecord Warning(
         DiagnosticsEventId eventId,
-        string message) => new(DateTimeOffset.Now, DiagnosticsLevel.Warning, eventId, message);
+        string message) => new(eventId, message, DateTimeOffset.Now, DiagnosticsLevel.Warning);
 
     public static DiagnosticsRecord Error(
         DiagnosticsEventId eventId,
-        string message, Exception? exception = null) => new(DateTimeOffset.Now, DiagnosticsLevel.Error, eventId,
-        message, exception);
+        string message, Exception? exception = null) =>
+        new(eventId, message, DateTimeOffset.Now, DiagnosticsLevel.Error, exception);
 };
