@@ -21,34 +21,57 @@ public sealed class MdbMetadataReader : IMdbMetadataReader
 
     public IReadOnlyList<MdbTableInfo> GetTables(string mdbPath)
     {
-        using var scope = new DiagnosticsScope(
-            _diagnostics!,
-            DiagnosticsEvents.MdbListTablesStart,
-            DiagnosticsEvents.MdbListTablesCompleted,
-            "Listing MDB tables");
-
-        using var connection = OleDbConnectionFactory.Create(mdbPath, _diagnostics);
-
-        _diagnostics?.LogInfo(DiagnosticsEvents.MdbOpen, $"Opening MDB file: {mdbPath}");
-        connection.Open();
-
-        DataTable schema = connection.GetSchema("Tables");
-
-        var result = new List<MdbTableInfo>();
-
-        foreach (DataRow row in schema.Rows)
+        try
         {
-            string? name = row["TABLE_NAME"].ToString();
-            string? type = row["TABLE_TYPE"].ToString();
+            using var connection = OleDbConnectionFactory.Create(mdbPath, _diagnostics);
 
-            if (type == "TABLE" && name is not null && !name.StartsWith("MSys"))
+            using (new DiagnosticsScope(
+                       _diagnostics!,
+                       DiagnosticsEvents.MdbListTablesStart,
+                       DiagnosticsEvents.MdbListTablesCompleted,
+                       $"Opening MDB connection"))
             {
-                result.Add(new MdbTableInfo() { Name = name, Type = type });
+                connection.Open();
+            }
+
+            DataTable tables;
+            using (new DiagnosticsScope(
+                       _diagnostics!,
+                       DiagnosticsEvents.MdbReadSchemaStart,
+                       DiagnosticsEvents.MdbReadSchemaCompleted,
+                       $"Reading Tables schema"))
+            {
+                tables = connection.GetSchema("Tables");
+            }
+
+            var results = new List<MdbTableInfo>();
+
+            using (new DiagnosticsScope(
+                       _diagnostics!,
+                       DiagnosticsEvents.MdbListTablesStart,
+                       DiagnosticsEvents.MdbListTablesCompleted,
+                       $"Building tables list"))
+            {
+                foreach (DataRow row in tables.Rows)
+                {
+                    string? name = row["TABLE_NAME"].ToString();
+                    string? type = row["TABLE_TYPE"].ToString();
+
+                    if (type == "TABLE" && name is not null && !name.StartsWith("MSys"))
+                    {
+                        results.Add(new MdbTableInfo() { Name = name, Type = type });
+                    }
+                }
+
+                _diagnostics?.LogInfo(DiagnosticsEvents.MdbTablesFound, $"Tables found: {results.Count}");
+                return results;
             }
         }
-
-        _diagnostics?.LogInfo(DiagnosticsEvents.MdbTablesFound, $"Tables found: {result.Count}");
-        return result;
+        catch (Exception ex)
+        {
+            _diagnostics?.LogError(DiagnosticsEvents.Error, "Failed to read tables from MDB.", ex);
+            throw;
+        }
     }
 
     public IReadOnlyList<MdbColumnInfo> GetTableSchema(string mdbPath, string tableName)
@@ -61,15 +84,17 @@ public sealed class MdbMetadataReader : IMdbMetadataReader
 
         try
         {
-            // open MDB
-            using var scope = new DiagnosticsScope(
-                _diagnostics!,
-                DiagnosticsEvents.MdbOpen,
-                DiagnosticsEvents.MdbOpenCompleted,
-                "Opening MDB");
-
             using var connection = OleDbConnectionFactory.Create(mdbPath, _diagnostics);
-            connection.Open();
+
+            // open MDB
+            using (new DiagnosticsScope(
+                       _diagnostics!,
+                       DiagnosticsEvents.MdbOpen,
+                       DiagnosticsEvents.MdbOpenCompleted,
+                       "Opening MDB connection"))
+            {
+                connection.Open();
+            }
 
             // read schema
             List<MdbColumnInfo> columns;
@@ -93,7 +118,6 @@ public sealed class MdbMetadataReader : IMdbMetadataReader
                         IsNullable = r["IS_NULLABLE"].ToString() == "YES"
                     }).ToList();
             }
-            // columns
 
             var columnMap = columns.ToDictionary(
                 c => c.Name,
@@ -112,7 +136,7 @@ public sealed class MdbMetadataReader : IMdbMetadataReader
 
                     foreach (DataRow row in indexSchema.Rows)
                     {
-                        var columnName = row["COLUMN_NAME"].ToString();
+                        var columnName = row["COLUMN_NAME"]?.ToString();
                         if (columnName == null || !columnMap.TryGetValue(columnName, out var column))
                             continue;
 
@@ -147,18 +171,19 @@ public sealed class MdbMetadataReader : IMdbMetadataReader
 
                     foreach (DataRow row in fkSchema.Rows)
                     {
-                        var fkColumn = row["FK_COLUMN_NAME"].ToString();
+                        var fkColumn = row["FK_COLUMN_NAME"]?.ToString();
                         if (fkColumn == null || !columnMap.TryGetValue(fkColumn, out var column))
                             continue;
                         column.IsForeignKey = true;
-                        column.ReferencesTable = row["PK_TABLE_NAME"].ToString();
-                        column.ReferencesColumn = row["PK_COLUMN_NAME"].ToString();
+                        column.ReferencesTable = row["PK_TABLE_NAME"]?.ToString();
+                        column.ReferencesColumn = row["PK_COLUMN_NAME"]?.ToString();
                     }
                 }
             }
             catch
             {
-                // ignored
+                // Access does not always expose FK metadata
+                // Intentionally ignored (best-effort)
             }
 
             _diagnostics!.LogInfo(DiagnosticsEvents.MdbSchemaColumnsFound, $"Columns found: {columns.Count}");
