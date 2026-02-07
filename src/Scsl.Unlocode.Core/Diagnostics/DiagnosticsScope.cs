@@ -28,6 +28,11 @@ public class DiagnosticsScope : IDisposable
        _stopwatch.Stop();
 
        _sink.LogInfo(_completedEvent,
-           $"{_operation} completed in {_stopwatch.ElapsedMilliseconds} ms.");
+           $"{_operation} completed.");
+
+       // Telemetry / performance
+       _sink.LogInfo(
+           DiagnosticsEvents.OperationRuntime,
+       $"{_operation} took {_stopwatch.ElapsedMilliseconds} ms");
     }
 }
