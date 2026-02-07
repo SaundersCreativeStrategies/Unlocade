@@ -16,19 +16,17 @@ public sealed class ConsoleDiagnosticsSink : IDiagnosticsSink
     public void LogInfo(DiagnosticsEventId eventId, string message)
     {
         if (_verbose)
-            Write(new DiagnosticsRecord(DateTimeOffset.Now, DiagnosticsLevel.Info, eventId, message));
+            Write(DiagnosticsRecord.Info(eventId, message));
     }
 
     public void LogWarn(DiagnosticsEventId eventId, string message)
     {
-        Write(new DiagnosticsRecord(
-            DateTimeOffset.Now, DiagnosticsLevel.Warning, eventId, message));
+        Write(DiagnosticsRecord.Warning(eventId, message));
     }
 
     public void LogError(DiagnosticsEventId eventId, string message, Exception? exception = null)
     {
-        Write(new DiagnosticsRecord(
-            DateTimeOffset.Now, DiagnosticsLevel.Error, eventId, message, exception));
+        Write(DiagnosticsRecord.Error(eventId, message, exception));
     }
 
     private static void Write(DiagnosticsRecord record)
