@@ -22,74 +22,73 @@ public class TableSchemaCommand : Command<TableSchemaSettings>
     public override int Execute(CommandContext context, TableSchemaSettings settings,
         CancellationToken cancellationToken)
     {
-        IDiagnosticsSink diagnostics = settings.Verbose
-            ? new ConsoleDiagnosticsSink(true)
-            : NullDiagnosticsSink.Instance;
+        var diagnostics = new ConsoleDiagnosticsSink(settings.Verbose);
 
-        if (settings.Verbose)
+        try
         {
-            diagnostics.LogInfo(
-                DiagnosticsEvents.MdbReadSchemaStart,
-                $"Preparing to read MDB file: '{settings.Table}'");
+            var reader = new MdbMetadataReader(diagnostics);
 
-            diagnostics.LogInfo(
-                DiagnosticsEvents.MdbOpen,
-                $"MDB file: {settings.FilePath}");
-        }
+            // ── MDB schema read (timed)
+            IReadOnlyList<MdbColumnInfo> schema;
+            using (new DiagnosticsScope(
+                       diagnostics, DiagnosticsEvents.MdbReadSchemaStart,
+                       DiagnosticsEvents.MdbReadSchemaCompleted,
+                       $"Reading schema from table '{settings.Table}'"))
+            {
+                // Get table list first
+                var tables = reader.GetTables(settings.FilePath);
 
-        var reader = new MdbMetadataReader(diagnostics);
+                // Resolve table name safely
+                var resolvedTable = TableNameResolver.Resolve(
+                    settings.Table, tables, diagnostics);
 
-        // ── MDB schema read (timed)
-        IReadOnlyList<MdbColumnInfo> schema;
-        using (new DiagnosticsScope(
-                   diagnostics, DiagnosticsEvents.MdbReadSchemaStart,
-                   DiagnosticsEvents.MdbReadSchemaCompleted,
-                   $"Reading schema from table '{settings.Table}'"))
-        {
-            // Get table list first
-            var tables = reader.GetTables(settings.FilePath);
+                schema = reader.GetTableSchema(settings.FilePath, resolvedTable);
+            }
 
-            // Resolve table name safely
-            var resolvedTable = TableNameResolver.Resolve(
-                settings.Table, tables, diagnostics);
+            diagnostics.LogInfo(DiagnosticsEvents.MdbSchemaColumnsFound, $"Columns found: {schema.Count}");
 
-            schema = reader.GetTableSchema(settings.FilePath, resolvedTable);
-        }
+            // ── JSON output path
+            if (settings.Json)
+            {
+                diagnostics.LogInfo(DiagnosticsEvents.CliJsonOutput, "Writing schema output as JSON");
 
-        diagnostics.LogInfo(DiagnosticsEvents.MdbSchemaColumnsFound, $"Columns found: {schema.Count}");
+                var json = JsonSerializer.Serialize(schema, new JsonSerializerOptions { WriteIndented = true });
+                AnsiConsole.Write(json);
+                return 0;
+            }
 
-        // ── JSON output path
-        if (settings.Json)
-        {
-            diagnostics.LogInfo(DiagnosticsEvents.CliJsonOutput,"Writing schema output as JSON");
+            // ── Table rendering path
+            var renderOptions = TableRenderOptionsFactory.From(settings);
+            if (settings.Verbose && renderOptions.MaxColumnWidth is not null)
+            {
+                diagnostics.LogInfo(
+                    DiagnosticsEvents.CliTruncationEnabled,
+                    $"Column truncation enabled (max-width={renderOptions.MaxColumnWidth}, mode={renderOptions.TruncateMode})");
+            }
 
-            var json = JsonSerializer.Serialize(schema, new JsonSerializerOptions { WriteIndented = true });
-            AnsiConsole.Write(json);
+            using (new DiagnosticsScope(
+                       diagnostics,
+                       DiagnosticsEvents.CliRenderStart,
+                       DiagnosticsEvents.CliRenderCompleted,
+                       "Rendering schema table"))
+            {
+                _renderer.Render(
+                    schema,
+                    style: TableStyle.MySql,
+                    options: renderOptions,
+                    propertyFilter: TableRendererDefaults.SimpleTypesOnly,
+                    valueFormatter: TableRendererDefaults.MySqlValueFormatter);
+            }
+
             return 0;
         }
-
-        // ── Table rendering path
-        var renderOptions = TableRenderOptionsFactory.From(settings);
-        if (settings.Verbose && renderOptions.MaxColumnWidth is not null)
+        catch (Exception ex)
         {
-            diagnostics.LogInfo(
-                DiagnosticsEvents.CliTruncationEnabled,
-                $"Column truncation enabled (max-width={renderOptions.MaxColumnWidth}, mode={renderOptions.TruncateMode})");
+            return CommandExceptionHandler.Handle(ex, diagnostics, settings.Verbose);
         }
-
-        using (new DiagnosticsScope(
-                   diagnostics,
-                   DiagnosticsEvents.CliRenderStart,
-                   DiagnosticsEvents.CliRenderCompleted,
-                   "Rendering schema table")) ;
-
-        _renderer.Render(
-            schema,
-            style: TableStyle.MySql,
-            options: renderOptions,
-            propertyFilter: TableRendererDefaults.SimpleTypesOnly,
-            valueFormatter: TableRendererDefaults.MySqlValueFormatter);
-
-        return 0;
+        finally
+        {
+            diagnostics.WritePerformanceSummary();
+        }
     }
 }

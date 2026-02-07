@@ -1,11 +1,14 @@
-﻿using System.Text.Json;
+﻿using System.Data.OleDb;
+using System.Text.Json;
 
+using Scsl.Unlocode.Core.Diagnostics;
 using Scsl.Unlocode.Infrastructure.Mdb.Metadata;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Json;
 
+using Unlocode.DataImporter.Diagnostics;
 using Unlocode.DataImporter.Presentation;
 using Unlocode.DataImporter.Presentation.Enums;
 using Unlocode.DataImporter.Presentation.Factory;
@@ -19,28 +22,42 @@ public sealed class ListTablesCommand : Command<ListTablesSettings>
     public override int Execute(CommandContext context, ListTablesSettings settings, CancellationToken
             cancellationToken)
     {
-        var reader = new MdbMetadataReader();
-        var tables = reader.GetTables(settings.FilePath);
-        var renderOptions = TableRenderOptionsFactory.From(settings);
+        var diagnostics = new ConsoleDiagnosticsSink(settings.Verbose);
 
-        if (settings.Json)
+        try
         {
-            var json = JsonSerializer.Serialize(tables,
-                new JsonSerializerOptions { WriteIndented = true }
-            );
+            var reader = new MdbMetadataReader();
+            var tables = reader.GetTables(settings.FilePath);
+            var renderOptions = TableRenderOptionsFactory.From(settings);
 
-            AnsiConsole.Write(new JsonText(json));
+            if (settings.Json)
+            {
+                var json = JsonSerializer.Serialize(tables,
+                    new JsonSerializerOptions { WriteIndented = true }
+                );
+
+                AnsiConsole.Write(new JsonText(json));
+            }
+            else
+            {
+                _renderer.Render(
+                    tables,
+                    style: TableStyle.MySql,
+                    options: renderOptions,
+                    propertyFilter: TableRendererDefaults.SimpleTypesOnly,
+                    headerFormatter: TableRendererDefaults.MysqlHeader,
+                    valueFormatter: TableRendererDefaults.MySqlValueFormatter);
+            }
+
+            return 0;
         }
-        else
+        catch (Exception ex)
         {
-            _renderer.Render(
-                tables,
-                style: TableStyle.MySql,
-                options: renderOptions,
-                propertyFilter: TableRendererDefaults.SimpleTypesOnly,
-                headerFormatter: TableRendererDefaults.MysqlHeader,
-                valueFormatter: TableRendererDefaults.MySqlValueFormatter);
+            return CommandExceptionHandler.Handle(ex, diagnostics, settings.Verbose);
         }
-        return 0;
+        finally
+        {
+            diagnostics.WritePerformanceSummary();
+        }
     }
 }
