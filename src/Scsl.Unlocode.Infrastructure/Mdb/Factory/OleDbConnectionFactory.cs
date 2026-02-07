@@ -13,33 +13,20 @@ internal static class OleDbConnectionFactory
         if (string.IsNullOrWhiteSpace(filePath))
             throw new ArgumentException("MDB path cannot be null or empty", nameof(filePath));
 
-        var provider = AccessProviderDetector.SelectProvider(filePath);
-
-        diagnostics?.LogInfo(DiagnosticsEvents.OleDbProviderSelected, $"Provider: {provider}");
-
-        var sink = diagnostics ?? NullDiagnosticsSink.Instance;
         try
         {
-            using var scope = new DiagnosticsScope(
-                sink,
-                DiagnosticsEvents.OleDbCreateStart,
-                DiagnosticsEvents.OleDbCreateCompleted,
-                "OLE DB connection creation");
-
-            sink.LogInfo(DiagnosticsEvents.OleDbCreateStart, "Starting OLE DB connection creation");
-            sink.LogInfo(DiagnosticsEvents.OleDbProviderSelected, $"OLE DB Provider selected: {provider}");
-            sink.LogInfo(DiagnosticsEvents.OleDbDataSourceSet, $"OLE DB data source set to {filePath}");
+            var provider = AccessProviderDetector.SelectProvider(filePath);
+            diagnostics?.LogInfo(DiagnosticsEvents.OleDbProviderSelected, $"Provider: {provider}");
 
             var connectionString = $"Provider={provider};Data Source={filePath};Persist Security Info=False;";
-
             var connection = new OleDbConnection(connectionString);
 
-            sink.LogInfo(DiagnosticsEvents.OleDbConnectionCreated, "OLE DB connection object created");
+            diagnostics?.LogInfo(DiagnosticsEvents.OleDbConnectionCreated, $"Connection: {connectionString}");
             return connection;
         }
         catch (Exception ex)
         {
-            sink.LogError(DiagnosticsEvents.OleDbCreateFailed, "Failed to create OLE DB connection", ex);
+            diagnostics?.LogError(DiagnosticsEvents.OleDbCreateFailed, "Failed to create OLE DB connection", ex);
             throw;
         }
     }
