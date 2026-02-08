@@ -4,7 +4,7 @@ using Scsl.Unlocode.Core.Diagnostics;
 
 using Spectre.Console;
 
-namespace Unlocode.DataImporter.Diagnostics;
+namespace UnlocodeImporter.Diagnostics;
 
 public sealed class ConsoleDiagnosticsSink : IDiagnosticsSink
 {

@@ -2,7 +2,7 @@
 
 using Scsl.Unlocode.Core.Diagnostics;
 
-namespace Unlocode.DataImporter.Diagnostics;
+namespace UnlocodeImporter.Diagnostics;
 
 internal static class CommandExceptionHandler
 {

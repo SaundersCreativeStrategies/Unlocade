@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Unlocode.DataImporter.Presentation;
+namespace UnlocodeImporter.Presentation;
 
 public static class TableRendererDefaults
 {

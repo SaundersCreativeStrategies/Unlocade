@@ -1,19 +1,17 @@
-﻿using System.Data.OleDb;
-using System.Text.Json;
+﻿using System.Text.Json;
 
-using Scsl.Unlocode.Core.Diagnostics;
 using Scsl.Unlocode.Infrastructure.Mdb.Metadata;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Json;
 
-using Unlocode.DataImporter.Diagnostics;
-using Unlocode.DataImporter.Presentation;
-using Unlocode.DataImporter.Presentation.Enums;
-using Unlocode.DataImporter.Presentation.Factory;
+using UnlocodeImporter.Presentation.Enums;
+using UnlocodeImporter.Diagnostics;
+using UnlocodeImporter.Presentation;
+using UnlocodeImporter.Presentation.Factory;
 
-namespace Unlocode.DataImporter.Commands.Tables;
+namespace UnlocodeImporter.Commands.Tables;
 
 public sealed class ListTablesCommand : Command<ListTablesSettings>
 {

@@ -2,7 +2,7 @@
 
 using Spectre.Console;
 
-namespace Unlocode.DataImporter.Diagnostics;
+namespace UnlocodeImporter.Diagnostics;
 
 internal static class SpectreDiagnosticsFormatter
 {

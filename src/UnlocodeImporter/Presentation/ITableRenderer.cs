@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 
-using Unlocode.DataImporter.Presentation.Enums;
-using Unlocode.DataImporter.Presentation.Options;
+using UnlocodeImporter.Presentation.Enums;
+using UnlocodeImporter.Presentation.Options;
 
-namespace Unlocode.DataImporter.Presentation;
+namespace UnlocodeImporter.Presentation;
 
 public interface ITableRenderer
 {

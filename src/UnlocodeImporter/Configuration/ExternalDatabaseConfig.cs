@@ -1,4 +1,4 @@
-﻿namespace Unlocode.DataImporter.Configuration;
+﻿namespace UnlocodeImporter.Configuration;
 
 public sealed class ExternalDatabaseConfig
 {

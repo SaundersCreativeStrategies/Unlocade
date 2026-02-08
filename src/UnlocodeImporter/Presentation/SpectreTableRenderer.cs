@@ -1,12 +1,11 @@
-﻿using System.Data.SqlTypes;
-using System.Reflection;
+﻿using System.Reflection;
 
 using Spectre.Console;
 
-using Unlocode.DataImporter.Presentation.Enums;
-using Unlocode.DataImporter.Presentation.Options;
+using UnlocodeImporter.Presentation.Enums;
+using UnlocodeImporter.Presentation.Options;
 
-namespace Unlocode.DataImporter.Presentation;
+namespace UnlocodeImporter.Presentation;
 
 public sealed class SpectreTableRenderer : ITableRenderer
 {

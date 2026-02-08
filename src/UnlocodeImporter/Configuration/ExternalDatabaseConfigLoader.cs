@@ -3,7 +3,7 @@
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Unlocode.DataImporter.Configuration;
+namespace UnlocodeImporter.Configuration;
 
 public static class ExternalDatabaseConfigLoader
 {

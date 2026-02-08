@@ -5,9 +5,9 @@ using Scsl.Unlocode.Infrastructure.Mdb;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-using Unlocode.DataImporter.Presentation.Enums;
+using UnlocodeImporter.Presentation.Enums;
 
-namespace Unlocode.DataImporter.Commands;
+namespace UnlocodeImporter.Commands;
 
 public abstract class GlobalSettings : CommandSettings
 {

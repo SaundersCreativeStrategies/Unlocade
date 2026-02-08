@@ -8,12 +8,12 @@ using Scsl.Unlocode.Infrastructure.Mdb.Resolution;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-using Unlocode.DataImporter.Diagnostics;
-using Unlocode.DataImporter.Presentation;
-using Unlocode.DataImporter.Presentation.Enums;
-using Unlocode.DataImporter.Presentation.Factory;
+using UnlocodeImporter.Presentation.Enums;
+using UnlocodeImporter.Diagnostics;
+using UnlocodeImporter.Presentation;
+using UnlocodeImporter.Presentation.Factory;
 
-namespace Unlocode.DataImporter.Commands.Tables;
+namespace UnlocodeImporter.Commands.Tables;
 
 public class TableSchemaCommand : Command<TableSchemaSettings>
 {

@@ -2,7 +2,7 @@
 
 using Spectre.Console.Cli;
 
-namespace Unlocode.DataImporter.Commands.Tables;
+namespace UnlocodeImporter.Commands.Tables;
 
 public sealed class ListTablesSettings : GlobalSettings
 {
