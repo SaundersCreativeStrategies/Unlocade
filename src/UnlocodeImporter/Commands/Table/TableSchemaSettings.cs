@@ -3,7 +3,7 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace UnlocodeImporter.Commands.Tables;
+namespace UnlocodeImporter.Commands.Table;
 
 public class TableSchemaSettings : GlobalSettings
 {

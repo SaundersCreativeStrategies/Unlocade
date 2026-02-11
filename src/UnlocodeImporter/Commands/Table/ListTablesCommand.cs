@@ -6,12 +6,12 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Json;
 
-using UnlocodeImporter.Presentation.Enums;
 using UnlocodeImporter.Diagnostics;
 using UnlocodeImporter.Presentation;
+using UnlocodeImporter.Presentation.Enums;
 using UnlocodeImporter.Presentation.Factory;
 
-namespace UnlocodeImporter.Commands.Tables;
+namespace UnlocodeImporter.Commands.Table;
 
 public sealed class ListTablesCommand : Command<ListTablesSettings>
 {
