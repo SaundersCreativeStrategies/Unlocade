@@ -1,14 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-
-using Spectre.Console;
 using Spectre.Console.Cli;
-using Spectre.Console.Cli.Help;
 
-using UnlocodeImporter.Commands;
-using UnlocodeImporter.Commands.Table;
+using UnlocodeImporter.Commands.Mdb.Table;
 
 var app = new CommandApp();
 var assembly = Assembly.GetExecutingAssembly();
