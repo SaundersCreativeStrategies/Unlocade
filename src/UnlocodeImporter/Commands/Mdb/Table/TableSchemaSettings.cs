@@ -5,7 +5,7 @@ using Spectre.Console.Cli;
 
 namespace UnlocodeImporter.Commands.Mdb.Table;
 
-public class TableSchemaSettings : GlobalSettings
+public class TableSchemaSettings : TableSettings
 {
     [CommandOption("-t|--table <TABLE>")]
     [Description("Table name (quote if it contains spaces, e.g. \"Example Table\")")]
