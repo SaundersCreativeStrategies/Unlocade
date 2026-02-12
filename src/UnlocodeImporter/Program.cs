@@ -3,7 +3,7 @@ using System.Reflection;
 
 using Spectre.Console.Cli;
 
-using UnlocodeImporter.Commands.Mdb.Table;
+using UnlocodeImporter.Commands.Mdb.Tables;
 
 var app = new CommandApp();
 var assembly = Assembly.GetExecutingAssembly();

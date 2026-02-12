@@ -1,4 +1,4 @@
-﻿using UnlocodeImporter.Commands.Mdb.Table;
+﻿using UnlocodeImporter.Commands.Mdb.Tables;
 using UnlocodeImporter.Presentation.Options;
 
 namespace UnlocodeImporter.Presentation.Factory;

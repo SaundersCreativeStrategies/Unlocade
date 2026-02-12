@@ -13,7 +13,7 @@ using UnlocodeImporter.Presentation;
 using UnlocodeImporter.Presentation.Enums;
 using UnlocodeImporter.Presentation.Factory;
 
-namespace UnlocodeImporter.Commands.Mdb.Table;
+namespace UnlocodeImporter.Commands.Mdb.Tables;
 
 public class TableSchemaCommand : Command<TableSchemaSettings>
 {
