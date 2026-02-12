@@ -12,60 +12,42 @@ var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
 app.Configure(config =>
 {
     config.SetApplicationName("UnlocodeImporter");
-    config.SetApplicationVersion(fileVersionInfo.FileVersion!);
-    config.ValidateExamples(); // Verify all WithExample calls are valid
+    config.SetApplicationVersion(fileVersionInfo.ProductVersion!);
 
     // Configure parsing behavior
     config.Settings.CaseSensitivity = CaseSensitivity.None;
     config.Settings.StrictParsing = true;
+    config.Settings.MaximumIndirectExamples = 0;
+    config.Settings.ShowOptionDefaultValues = true;
 
-    // Customize help text styling
-    config.Settings.HelpProviderStyles = new()
-    {
-        Description = new()
-        {
-            Header = "bold blue"
-        },
-        Options = new ()
-        {
-            RequiredOption = "bold red",
-            DefaultValue = "dim"
-        },
-        Arguments = new ()
-        {
-            RequiredArgument = "bold green",
-            OptionalArgument = "dim green"
-        },
-        Commands =  new ()
-        {
-            RequiredArgument =  "bold yellow",
-        },
-        Examples =  new ()
-        {
-            Arguments = "bold green"
-        }
-    };
+    // Verify all WithExample calls are valid
+    //config.ValidateExamples();
 
 #if Debug
     config.PropagateExceptions(); // Get full stack trace
-
 #endif
 
     config.AddBranch("mdb", mdb =>
     {
-        mdb.SetDescription("MDB table operations");
+        mdb.SetDescription("Provide tools that list available tables and inspect detailed schema metadata in an MDB database.");
 
         mdb.AddBranch("table", tables =>
         {
-            tables.SetDescription("");
-
             tables.AddCommand<ListTablesCommand>("list")
-                .WithDescription("Display all table names available in the MDB file")
-                .WithExample("mdb", "table", "list", "--file FILE");
+                .WithDescription("List all user-defined tables available in the MDB file.")
+                .WithExample("mdb", "table", "list", "--file", "data.mdb")
+                .WithExample("mdb", "table", "list", "--file", "data.mdb", "--json")
+                .WithExample("mdb", "table", "list", "--file", "data.mdb", "--verbose")
+                .WithExample("mdb", "table", "list", "--file", "data.mdb", "--max-width", "40",
+                    "--truncate-mode", "strict");
 
             tables.AddCommand<TableSchemaCommand>("schema")
-                .WithDescription("Show schema for a table")
-                .WithExample("mdb", "table", "schema", "--file FILE", "--table TABLE");
+                .WithDescription("Show the structure of a table, including its columns and how the data is defined.")
+                .WithExample("mdb", "table", "schema", "--file", "data.mdb", "--table", "tableName")
+                .WithExample("mdb", "table", "schema", "--file", "data.mdb", "--table", "tableName", "--json")
+                .WithExample("mdb", "table", "schema", "--file", "data.mdb", "--table", "tableName", "--verbose")
+                .WithExample("mdb", "table", "schema", "--file", "data.mdb", "--table", "tableName", "--max-width",
+                    "40", "--truncated-mode", "strict");
         });
     });
 
