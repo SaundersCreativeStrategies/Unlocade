@@ -7,7 +7,7 @@ using Spectre.Console.Cli;
 
 using UnlocodeImporter.Presentation.Enums;
 
-namespace UnlocodeImporter.Commands.Mdb.Tables;
+namespace UnlocodeImporter.Commands.Mdb.Tables.Settings;
 
 public abstract class TableSettings : GlobalSettings
 {

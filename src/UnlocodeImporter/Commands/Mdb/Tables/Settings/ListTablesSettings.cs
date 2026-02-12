@@ -2,7 +2,7 @@
 
 using Spectre.Console.Cli;
 
-namespace UnlocodeImporter.Commands.Mdb.Tables;
+namespace UnlocodeImporter.Commands.Mdb.Tables.Settings;
 
 public sealed class ListTablesSettings : TableSettings
 {

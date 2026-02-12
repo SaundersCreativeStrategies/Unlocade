@@ -8,6 +8,7 @@ using Scsl.Unlocode.Infrastructure.Mdb.Resolution;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
+using UnlocodeImporter.Commands.Mdb.Tables.Settings;
 using UnlocodeImporter.Diagnostics;
 using UnlocodeImporter.Presentation;
 using UnlocodeImporter.Presentation.Enums;
