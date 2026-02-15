@@ -66,6 +66,7 @@ public sealed class SpectreTableRenderer : ITableRenderer
         }
     }
 
+    // TODO Need to fix the way the Truncated when the table is rendered
     private static string Truncate(string value, TableRenderOptions options)
     {
         if(options.MaxColumnWidth is null)
@@ -83,6 +84,7 @@ public sealed class SpectreTableRenderer : ITableRenderer
         };
     }
 
+    // TODO FriendlyTruncate does not work correctly.
     private static string FriendlyTruncate(string value, int max, string suffix)
     {
         if (max <= suffix.Length)
