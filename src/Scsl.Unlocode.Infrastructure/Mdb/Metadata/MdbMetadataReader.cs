@@ -2,15 +2,17 @@
 using System.Data.OleDb;
 using System.Diagnostics.CodeAnalysis;
 
+using Scsl.Unlocode.Core.Abstractions;
 using Scsl.Unlocode.Core.Diagnostics;
 using Scsl.Unlocode.Core.Metadata;
+using Scsl.Unlocode.Core.Query;
 using Scsl.Unlocode.Infrastructure.Mdb.Factory;
 using Scsl.Unlocode.Infrastructure.Mdb.Mapper;
 
 namespace Scsl.Unlocode.Infrastructure.Mdb.Metadata;
 
 [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
-public sealed class MdbMetadataReader : IMdbMetadataReader
+public sealed class MdbMetadataReader : IMdbMetadataReader, IMdbQueryExecutor
 {
     private readonly IDiagnosticsSink? _diagnostics;
 
@@ -197,6 +199,81 @@ public sealed class MdbMetadataReader : IMdbMetadataReader
                 ex);
             throw;
         }
+    }
+
+    public IReadOnlyList<MdbQueryRow> ExecuteQuery(MdbQueryRequest request)
+    {
+        try
+        {
+            using var connection = OleDbConnectionFactory.Create(request.MdbPath, _diagnostics);
+
+            using (new DiagnosticsScope(
+                       _diagnostics!,
+                       DiagnosticsEvents.MdbQueryConnectionStart,
+                       DiagnosticsEvents.MdbQueryConnectionCompleted,
+                       "Opening MDB Connection"))
+            {
+                connection.Open();
+            }
+
+            var sql = BuildSql(request);
+
+            using (new DiagnosticsScope(
+                       _diagnostics!,
+                       DiagnosticsEvents.MdbQueryExecuteStart,
+                       DiagnosticsEvents.MdbQueryExecuteCompleted,
+                       "Executing SQL command"))
+            {
+                using var command = new OleDbCommand(sql, connection);
+                using var reader = command.ExecuteReader();
+
+                var results = new List<MdbQueryRow>();
+
+                while (reader.Read())
+                {
+                    var values = new Dictionary<string, object?>();
+
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        var column = reader.GetName(i);
+                        var value = reader.IsDBNull(i) ? null : reader.GetValue(i);
+
+                        values[column] = value;
+                    }
+
+                    results.Add(new MdbQueryRow(values));
+                }
+
+                _diagnostics?.LogInfo(DiagnosticsEvents.MdbQueryRowsReturned,
+                    $"Rows returned: {results.Count}");
+
+                return results;
+            }
+        }
+        catch (Exception e)
+        {
+            _diagnostics?.LogError(DiagnosticsEvents.Error, "Failed to execute MDB query.");
+            throw;
+        }
+    }
+
+    private static string BuildSql(MdbQueryRequest request)
+    {
+        if(!string.IsNullOrWhiteSpace(request.Sql))
+            return request.Sql;
+
+        var selectClause = string.IsNullOrWhiteSpace(request.Select) ? "*" : request.Select;
+
+        var topClause = request.Top is not null ? $"TOP {request.Top.Value} " : string.Empty;
+
+        var sql = $"SELECT {topClause}{selectClause} FROM [{request.Table}]";
+
+        if (!string.IsNullOrWhiteSpace(request.Where))
+        {
+            sql += $" WHERE {request.Where}";
+        }
+
+        return sql;
     }
 
     private static bool HasSchema(OleDbConnection connection, string name)

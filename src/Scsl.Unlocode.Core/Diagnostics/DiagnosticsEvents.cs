@@ -38,6 +38,17 @@ public static class DiagnosticsEvents
     public static readonly DiagnosticsEventId AccessDenied = new(1191, "ACCESS_DENIED");
 
     // ─────────────────────────
+    // Query Pipeline (1200-1299)
+    // ─────────────────────────
+    public static readonly DiagnosticsEventId MdbQueryStart = new(1200, "MDB_QUERY_START");
+    public static readonly DiagnosticsEventId MdbQueryCompleted = new(1201, "MDB_QUERY_COMPLETED");
+    public static readonly DiagnosticsEventId MdbQueryConnectionStart = new(1202, "MDB_QUERY_CONNECTION_START");
+    public static readonly DiagnosticsEventId MdbQueryConnectionCompleted = new(1203, "MDB_QUERY_CONNECTION_COMPLETED");
+    public static readonly DiagnosticsEventId MdbQueryExecuteStart = new(1204, "MDB_QUERY_EXECUTE_START");
+    public static readonly DiagnosticsEventId MdbQueryExecuteCompleted = new(1205, "MDB_QUERY_EXECUTE_COMPLETED");
+    public static readonly DiagnosticsEventId MdbQueryRowsReturned = new(1206, "MDB_QUERY_ROWS_RETURNED");
+
+    // ─────────────────────────
     // Import Pipeline (2000–2999)
     // ─────────────────────────
 

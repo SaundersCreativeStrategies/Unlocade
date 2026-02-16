@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 
+using Scsl.Unlocode.Core.Abstractions;
+
 using Spectre.Console;
 
 using UnlocodeImporter.Presentation.Enums;
@@ -37,6 +39,19 @@ public sealed class SpectreTableRenderer : ITableRenderer
 
         ApplyStyle(table, style, title);
 
+        // Dictionary-backed rows
+        if (typeof(IDictionaryRow).IsAssignableFrom(typeof(T)))
+        {
+            RenderDictionaryRows(
+                list.Cast<IDictionaryRow>(),
+                table,
+                renderOptions,
+                style);
+
+            return;
+        }
+
+        // relection-based DTO rendering
         foreach (var prop in properties)
         {
             table.AddColumn( new TableColumn(
@@ -63,6 +78,54 @@ public sealed class SpectreTableRenderer : ITableRenderer
         {
             AnsiConsole.WriteLine(
                 $"{list.Count} row{(list.Count == 1 ? "" : "s")} in set");
+        }
+    }
+
+    // Dictionary Rendering
+    private static void RenderDictionaryRows(
+        IEnumerable<IDictionaryRow> rows,
+        Table table,
+        TableRenderOptions options,
+        TableStyle style)
+    {
+        var rowlist = rows.ToList();
+        if (!rowlist.Any())
+            return;
+
+        var first = rowlist.First().Values;
+        var columns = first.Keys.ToList();
+
+        foreach (var column in columns)
+        {
+            table.AddColumn(new TableColumn(column)
+            {
+                Alignment =  Justify.Left,
+                NoWrap = true
+            });
+        }
+
+        foreach (var row in rowlist)
+        {
+            var dict = row.Values;
+
+            var values = columns.Select(col =>
+            {
+                var value = dict.TryGetValue(col, out var v)
+                    ? v?.ToString() ?? "NULL"
+                    : "NULL";
+
+                return Truncate(value.Trim(), options);
+            }).ToArray();
+
+            table.AddRow(values);
+        }
+
+        AnsiConsole.Write(table);
+
+        if (style == TableStyle.MySql)
+        {
+            AnsiConsole.WriteLine(
+                $"{rowlist.Count} row{(rowlist.Count == 1 ? "" : "s")} in set");
         }
     }
 
